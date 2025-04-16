@@ -1,6 +1,6 @@
 import express from "express";
 import {allTransactions, addTransaction ,transactionById,transactionByUserId, 
-    updateTransaction, deleteTransaction,allTransactionStatistics} from '../controllers/transaction.controller.js';
+    updateTransaction, deleteTransaction,allTransactionStatistics,allTransactionType} from '../controllers/transaction.controller.js';
 
 const router = express.Router();
 
@@ -11,5 +11,6 @@ router.put('/update/:id',updateTransaction);
 router.delete('/delete/:id',deleteTransaction);
 router.post('/all', allTransactions);
 router.post('/statistics/:year/:userid', allTransactionStatistics);
+router.post('/type/:type', allTransactionType);
 
 export default router;

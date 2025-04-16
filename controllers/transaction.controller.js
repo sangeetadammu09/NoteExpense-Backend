@@ -54,6 +54,50 @@ export const allTransactionStatistics = async (req, res) => {
   }
 }
 
+
+export const allTransactionType = async (req, res) => {
+  const type = req.params.type;
+  let {yearid, userid} = req.body;
+ // console.log(yearid)
+  try {
+    const startOfYear = (`${yearid}-01-01T00:00:00.000Z`);
+    const startOfNextYear = (`${Number(yearid) + 1}-01-01T00:00:00.000Z`);
+  //  console.log(startOfYear, startOfNextYear)
+   if(type){
+    const data = await Transaction.find({ userid: userid,  date: {
+      $gte: startOfYear,
+    $lt: startOfNextYear},type : type}).sort({ createdAt: 1 });
+
+    const grouped = data.reduce((acc, { _id,category, amount }) => {
+      acc[category] = (acc[category] || 0) + amount;
+
+      console.log(acc)
+      return acc;
+    }, {});
+
+    const groupedArray = Object.entries(grouped).map(([category, amount], index) => ({
+      id: index + 1,
+      label : category,
+      value : amount
+    }));
+    
+    console.log(groupedArray);
+    
+    return res.status(200).json({ status: 200, data: groupedArray })
+
+   }else{
+    return res.status(400).json({ status: 400, message: 'Transaction Type is required', error: true })
+   }
+
+
+   //  let result = paginatorHelper(req.body.pageNumber, req.body.pageSize, groupedByMonth);
+
+
+  } catch (err) {
+    return res.status(400).json({ status: 400, message: err.message, error: true })
+  }
+}
+
 export const addTransaction = async (req, res) => {
   try {
     const validateSchema = transactionValidateSchema(req.body)
