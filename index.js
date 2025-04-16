@@ -23,7 +23,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/transaction", transactionRoutes);
 app.use("/api/transaction/category", transactionCategoryRoutes);
 
-app.get("/api/welcome", (req, res) => {
+app.get("/welcome", (req, res) => {
 	console.log('welcome')
 });
 
